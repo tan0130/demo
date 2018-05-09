@@ -8,4 +8,7 @@ public class Login {
     public static void sayHello() {
         System.out.println("Hello World！");
     }
+    public static void sayHi() {
+        System.out.println("Hi!");
+    }
 }
