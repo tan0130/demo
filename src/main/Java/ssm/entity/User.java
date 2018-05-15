@@ -1,9 +1,17 @@
 package ssm.entity;
+
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+
+import javax.persistence.Entity;
+import javax.persistence.Id;
+
 /**
  * create by tan on 2018-05-03
  * 用户实体类
  * */
+@Entity
 public class User {
+    @Id
     private int userid; // 用户编号
     private String nickname; // 用户昵称
     private String username; // 用户姓名
@@ -12,6 +20,9 @@ public class User {
     private String tel; // 用户联系方式
     private String email; // 用户邮箱
     private String mark; // 备注
+
+    public User() {
+    }
 
     public User(int userid, String nickname, String username, String password, String sex, String tel, String email, String mark) {
         this.userid = userid;
