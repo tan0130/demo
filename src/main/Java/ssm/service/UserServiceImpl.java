@@ -5,6 +5,7 @@ import org.springframework.stereotype.Service;
 import ssm.dao.UserDAO;
 import ssm.entity.User;
 
+import javax.annotation.Resource;
 import java.util.List;
 
 /**
@@ -31,5 +32,30 @@ public class UserServiceImpl implements UserService{
     @Override
     public User getUserByIdAndPwd(int id, String password) {
         return userDAO.getUserByIdAndPwd(id, password);
+    }
+
+    @Override
+    public void addUser(User user) {
+        userDAO.addUser(user);
+    }
+
+    @Override
+    public void deleteUser(int id) {
+        userDAO.deleteUser(id);
+    }
+
+    @Override
+    public void updateUser(User user) {
+        userDAO.updateUser(user);
+    }
+
+    @Override
+    public void updatePassword(User user) {
+        userDAO.updatePassword(user);
+    }
+
+    @Override
+    public List<User> getUserById1(int id) {
+        return userDAO.getUserById1(id);
     }
 }

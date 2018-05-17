@@ -8,8 +8,8 @@
     </select>
 
     <!-- 根据id查询用户信息 -->
-    <select id = "getUserById" parameterType = "int" resultType = "ssm.entity.User">
-        select * from user where userid = #{userId};
+    <select id = "getUserById" parameterType = "int" resultType="ssm.entity.User">
+        select * from user where userid = #{userid};
     </select>
 
     <!-- 根据ID和密码查询用户信息 在MyBatis3.4.4版不能直接使用#{0}要使用 #{arg0}-->
@@ -18,33 +18,33 @@
     </select>
 
 
-    <!--&lt;!&ndash; 更具ID查询用户信息 &ndash;&gt;
-    <select id = "getUserById" parameterType = "int" resultType = "entity.User">
-        select * from user where userid = #{userId};
+     <!--根据ID查询用户信息-->
+    <select id = "getUserById1" parameterType = "int" resultType="ssm.entity.User">
+        select * from user where userid = #{userid};
     </select>
 
-    &lt;!&ndash; 根据ID和password来查询用户信息 &ndash;&gt;
-    <select id="getUserByIdAndPwd" resultType="entity.User">
+    <!--根据ID和password来查询用户信息-->
+    <!--<select id="getUserByIdAndPwd">
         select * from user where userid = #{0} and password = #{1};
-    </select>
+    </select>-->
 
-    &lt;!&ndash; 添加用户信息 &ndash;&gt;
-    <insert id = "addUser" parameterType = "entity.User">
-        insert into user(nickname,password,username,sex,tel,email,mark) values(#{nickName},#{userPwd},#{userName},#{sex},#{tel},#{email},#{mark});
+    <!--添加用户信息-->
+    <insert id = "addUser" parameterType="ssm.entity.User">
+        insert into user(nickname,password,username,sex,tel,email,mark) values(#{nickname},#{password},#{username},#{sex},#{tel},#{email},#{mark});
     </insert>
 
-    &lt;!&ndash; 删除用户信息 &ndash;&gt;
+    <!--删除用户信息-->
     <delete id = "deleteUser" parameterType = "int">
-        delete from user where userid = #{userId};
+        delete from user where userid = #{userid};
     </delete>
 
-    &lt;!&ndash; 编辑用户信息 &ndash;&gt;
-    <update id = "editUser" parameterType = "entity.User">
-        update user set nickname=#{nickName},username=#{userName},sex=#{sex},tel=#{tel},email=#{email},mark=#{mark} where userid = #{userId};
+    <!--编辑用户信息-->
+    <update id = "updateUser">
+        update user set nickname=#{nickname},username=#{username},sex=#{sex},tel=#{tel},email=#{email},mark=#{mark} where userid = #{userid};
     </update>
 
-    &lt;!&ndash; 修改用户密码 &ndash;&gt;
-    <update id="editPassword">
-        update user set password=#{userPwd} where userid=#{userId};
-    </update>-->
+    <!--修改用户密码-->
+    <update id="updatePassword">
+        update user set password=#{password} where userid=#{userid};
+    </update>
 </mapper>

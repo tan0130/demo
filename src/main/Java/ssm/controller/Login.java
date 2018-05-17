@@ -5,10 +5,4 @@ package ssm.controller;
  * 登录控制
  **/
 public class Login {
-    public static void sayHello() {
-        System.out.println("Hello World！");
-    }
-    public static void sayHi() {
-        System.out.println("Hi!");
-    }
 }

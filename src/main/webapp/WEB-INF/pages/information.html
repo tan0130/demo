@@ -26,15 +26,15 @@
 			<table>
 				<tr>
 				 	<td width="60" align="right" style="margin-left:20px">用户名:</td>
-				 	<td><input type="text" id="nickName" name="nickName"/></td>
+				 	<td><input type="text" id="nickname" name="nickname"/></td>
 				</tr>
 				<tr>
 					<td align="right">姓&nbsp;&nbsp;&nbsp;名:</td>
-					<td><input type="text" id="userName" name="userName"/></td>
+					<td><input type="text" id="username" name="username"/></td>
 				</tr>
 				<tr>
 					<td align="right">密&nbsp;&nbsp;&nbsp;码:</td>
-					<td><input type="text" id="userPwd" name="userPwd"/></td>
+					<td><input type="text" id="password" name="password"/></td>
 				</tr>
 				<tr>
 					<td align="right">性&nbsp;&nbsp;&nbsp;别:</td>
@@ -93,7 +93,7 @@
     query();
     function query() {
 	 $('#tb').datagrid({
-	    	url:'../../../managesys/user/getAllUser',
+	    	url:'/user/getAllUser',
 	    	method: 'GET',
 			loadFilter:pagerFilter,	// 分页过滤器
 			//queryParams: params, // 传入查询参数
@@ -125,7 +125,8 @@
 	 // 添加人员信息
 	 function add() {
 		 $('#add-form').form('submit',{
-			url:'../../../managesys/user/addUser',
+			url:'/user/addUser',
+			 async: false,
 		 	success:function(data) {
 		 		if(data == "success") {
 		 			$.messager.alert('信息提示','添加成功！','info');
@@ -181,7 +182,7 @@
 				 if(result) {
 					 $.ajax({
 						type: 'post',
-						url: '../../../managesys/user/deleteUser',
+						url: '/user/delUser',
 						data: {
 							"id": rowIndex
 						},
@@ -209,7 +210,7 @@
 	 function edit() {
 		 var item = $('#tb').datagrid('getSelected');
 		  $('#add-form').form('submit',{
-				 url: '../../../managesys/user/editUser?id=' + item.userid,
+				 url: '/user/updateUser?id=' + item.userid,
 				 success:function(data) {
 					if(data == "success") {
 						$.messager.alert('信息提示','提交成功','info');
@@ -256,9 +257,9 @@
 				}]
 			 });
 		 	// 在对话框回显选中行的值
-			$('#nickName').val(item.nickname);
-            $('#userName').val(item.username); 
-            $('#userPwd').val('*****');
+			$('#nickname').val(item.nickname);
+            $('#username').val(item.username);
+            $('#password').val('*****');
             $('#sex').val();
             $('#tel').val(item.tel);  
             $('#email').val(item.email); 
@@ -274,7 +275,7 @@
 			 query();
 		 } else {
 			 $('#tb').datagrid({
-		    	url:'../../../managesys/user/getUserByIdList?id='+ value,
+		    	url:'/user/getUserById1?id='+ value,
 		    	method: 'GET',
 				loadFilter:pagerFilter,	// 分页过滤器
 				//queryParams: params, // 传入查询参数
