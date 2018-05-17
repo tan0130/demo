@@ -1,6 +1,6 @@
 package ssm.entity;
 
-import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+
 
 import javax.persistence.Entity;
 import javax.persistence.Id;
