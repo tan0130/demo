@@ -87,6 +87,7 @@
     }, '密码不正确');
 
     $().ready(function(){
+        var id = $('#userId').val();
         $('#signform').validate({
             rules: {
                 userId: {
@@ -109,8 +110,7 @@
                 }
             },
             submitHandler: function() {
-                var menu = "admin/menu";
-                window.location.href = "/user/toPage?page=" + menu;
+                window.location.href = "/user/toPage?page=" + id;
             }
         });
     });
