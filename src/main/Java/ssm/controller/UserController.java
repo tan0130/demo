@@ -7,7 +7,6 @@ package ssm.controller;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.apache.logging.log4j.Logger;
 import org.apache.logging.log4j.ThreadContext;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -32,15 +31,6 @@ public class UserController {
 
     @Autowired
     private UserService userService;
-
-    // 用户登录校验
-    @RequestMapping(value = "/login", method = RequestMethod.GET)
-    @ResponseBody
-    public String login() {
-        System.out.println("123");
-        System.out.println("用户信息为：" + userService.getAllUser());
-        return "index";
-    }
 
     // 根据ID查询用户信息
     @RequestMapping(value = "/getUserById", method = RequestMethod.GET)
@@ -91,8 +81,11 @@ public class UserController {
     }
 
     @RequestMapping(value = "/toPage")
-    public String getMenu(String page) {
-        return page;
+    public String getMenu(int id) {
+        ThreadContext.put("userId", String.valueOf(id));
+        ThreadContext.put("userName", userService.getUserById(id).getUsername());
+        logger.info("登录成功");
+        return "admin/menu";
     }
 
     @RequestMapping(value = "/toPage1")
@@ -127,7 +120,7 @@ public class UserController {
     @ResponseBody
     public String addUser(User user) {
         try {
-            System.out.println("添加信息为：" + user);
+            userService.addUser(user);
             return "success";
         } catch(Exception e) {
             return "fail";
@@ -139,8 +132,10 @@ public class UserController {
     @ResponseBody
     public String delUser(int id) {
         try {
-            userService.deleteUser(id);
+            ThreadContext.put("userId", String.valueOf(id));
+            ThreadContext.put("userName", userService.getUserById(id).getUsername());
             logger.info("删除信息成功");
+            userService.deleteUser(id);
             return "success";
         } catch(Exception e) {
             return "fail";
@@ -165,10 +160,12 @@ public class UserController {
     @ResponseBody
     public String updatePassword(User user, int id,  String password) {
         try {
-            System.out.println("更新用户密码");
+            user.setUserid(id);
             user.setPassword(password);
-            System.out.println(user);
-            userService.updateUser(user);
+            userService.updatePassword(user);
+            ThreadContext.put("userId", String.valueOf(id));
+            ThreadContext.put("userName", userService.getUserById(id).getUsername());
+            logger.info("修改密码成功");
             return "success";
         } catch(Exception e) {
             return "fail";

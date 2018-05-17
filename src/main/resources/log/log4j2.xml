@@ -73,13 +73,13 @@
         </JDBC>-->
 
         <JDBC name="database" tableName="log">
-            <ConnectionFactory class="dbconnection.ConnectionFactory" method="getDatabaseConnection"/>
+            <ConnectionFactory class="ssm.dbconnection.ConnectionFactory" method="getDatabaseConnection"/>
             <Column name="userid" pattern="%X{userId}"/>
             <Column name="username" pattern="%X{userName}"/>
             <Column name="class" pattern="%c"/>
             <Column name="method" pattern="%M"/>
             <Column name="createtime" isEventTimestamp="true"/>
-            <Column name="loglevel" pattern="%-5level"/>
+            <Column name="level" pattern="%-5level"/>
             <Column name="message" pattern="%msg"/>
         </JDBC>
 
