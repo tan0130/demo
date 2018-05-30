@@ -22,13 +22,6 @@
   </properties>
 
   <dependencies>
-    <!-- junit测试类 -->
-    <dependency>
-      <groupId>junit</groupId>
-      <artifactId>junit</artifactId>
-      <version>4.11</version>
-      <scope>test</scope>
-    </dependency>
 
     <!-- jstl标签类 -->
     <dependency>
@@ -160,6 +153,19 @@
       <artifactId>commons-logging</artifactId>
       <version>1.1.1</version>
     </dependency>
+
+    <!-- junit测试类 -->
+    <dependency>
+      <groupId>junit</groupId>
+      <artifactId>junit</artifactId>
+      <version>4.12</version>
+    </dependency>
+    <dependency>
+      <groupId>org.springframework</groupId>
+      <artifactId>spring-test</artifactId>
+      <version>4.3.14.RELEASE</version>
+    </dependency>
+
   </dependencies>
 
   <build>
