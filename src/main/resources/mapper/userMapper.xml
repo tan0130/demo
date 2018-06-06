@@ -9,18 +9,18 @@
 
     <!-- 根据id查询用户信息 -->
     <select id = "getUserById" parameterType = "int" resultType="ssm.entity.User">
-        select * from user where userid = #{userid};
+        select * from user where id = #{id};
     </select>
 
     <!-- 根据ID和密码查询用户信息 在MyBatis3.4.4版不能直接使用#{0}要使用 #{arg0}-->
     <select id="getUserByIdAndPwd" resultType="ssm.entity.User">
-        select * from user where userid = #{arg0} and password = #{arg1};
+        select * from user where id = #{0} and password = #{1};
     </select>
 
 
      <!--根据ID查询用户信息-->
     <select id = "getUserById1" parameterType = "int" resultType="ssm.entity.User">
-        select * from user where userid = #{userid};
+        select * from user where id = #{id};
     </select>
 
     <!--根据ID和password来查询用户信息-->
@@ -35,7 +35,7 @@
 
     <!--删除用户信息-->
     <delete id = "deleteUser" parameterType = "int">
-        delete from user where userid = #{userid};
+        delete from user where id = #{userid};
     </delete>
 
     <!--编辑用户信息-->

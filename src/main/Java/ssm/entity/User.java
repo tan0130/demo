@@ -12,7 +12,7 @@ import javax.persistence.Id;
 @Entity
 public class User {
     @Id
-    private int userid; // 用户编号
+    private int id; // 用户编号
     private String nickname; // 用户昵称
     private String username; // 用户姓名
     private String password; // 用户密码
@@ -24,8 +24,8 @@ public class User {
     public User() {
     }
 
-    public User(int userid, String nickname, String username, String password, String sex, String tel, String email, String mark) {
-        this.userid = userid;
+    public User(int id, String nickname, String username, String password, String sex, String tel, String email, String mark) {
+        this.id = id;
         this.nickname = nickname;
         this.username = username;
         this.password = password;
@@ -36,11 +36,11 @@ public class User {
     }
 
     public int getUserid() {
-        return userid;
+        return id;
     }
 
-    public void setUserid(int userid) {
-        this.userid = userid;
+    public void setUserid(int id) {
+        this.id = id;
     }
 
     public String getNickname() {
@@ -102,7 +102,7 @@ public class User {
     @Override
     public String toString() {
         return "User{" +
-                "userid=" + userid +
+                "id=" + id +
                 ", nickname='" + nickname + '\'' +
                 ", username='" + username + '\'' +
                 ", password='" + password + '\'' +

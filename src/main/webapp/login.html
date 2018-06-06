@@ -1,4 +1,4 @@
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<!DOCTYPE HTML>
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     <title>用户登录</title>
@@ -31,10 +31,16 @@
     </div>
 </form>
 <script type="text/javascript">
+    // 设置一个标志位，防止ajax重复提交请求
+    //var flag = false;
     // 自定义校验用户是否存在
     $.validator.addMethod('idCheck', function(value, element) {
         var userid = $('#userId').val();
-        $.ajax({
+        /*if (flag) {
+            return;
+        }
+        flag = true;*/
+        $.ajax({ // 进入ajax提交过程
             type: 'get',
             async: false,
             url: '/user/getUserById',
@@ -50,8 +56,10 @@
                 } else {
                     value = true;
                 }
+               // flag = false; // 标记为可提交状态
             },
             error: function(data) {
+               // flag = false;
                 $.messager.alert('信息提示', '服务不可用!', 'info');
             }
         });
@@ -87,7 +95,6 @@
     }, '密码不正确');
 
     $().ready(function(){
-        var id = $('#userId').val();
         $('#signform').validate({
             rules: {
                 userId: {
@@ -110,6 +117,7 @@
                 }
             },
             submitHandler: function() {
+                var id = $('#userId').val();
                 window.location.href = "/user/toPage?id=" + id;
             }
         });

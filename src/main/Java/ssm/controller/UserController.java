@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import ssm.entity.User;
 import ssm.service.UserService;
 
+import javax.persistence.Id;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -33,9 +34,10 @@ public class UserController {
     private UserService userService;
 
     // 根据ID查询用户信息
-    @RequestMapping(value = "/getUserById", method = RequestMethod.GET)
+    @RequestMapping(value = "/getUserById", produces = "application/json; charset=utf-8", method = RequestMethod.GET)
     @ResponseBody
     public String getUserById(int id) {
+        System.out.println(id);
         try {
             if(userService.getUserById(id) == null) {
                 return "false";
@@ -48,7 +50,7 @@ public class UserController {
     }
 
     // 根据ID查询用户信息
-    @RequestMapping(value = "/getUserById1", method = RequestMethod.GET)
+    @RequestMapping(value = "/getUserById1", produces = "application/json; charset=utf-8", method = RequestMethod.GET)
     @ResponseBody
     public String getUserById1(int id) {
         try {
@@ -70,7 +72,7 @@ public class UserController {
     @ResponseBody
     public String getUserByIdAndPwd(int id, String password) {
         try {
-            if(userService.getUserByIdAndPwd(id, password) == null) {
+            if (userService.getUserByIdAndPwd(id, password) == null) {
                 return "false";
             } else {
                 return "true";

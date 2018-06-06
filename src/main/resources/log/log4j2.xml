@@ -79,7 +79,7 @@
             <Column name="class" pattern="%c"/>
             <Column name="method" pattern="%M"/>
             <Column name="createtime" isEventTimestamp="true"/>
-            <Column name="level" pattern="%-5level"/>
+            <Column name="loglevel" pattern="%-5level"/>
             <Column name="message" pattern="%msg"/>
         </JDBC>
 
