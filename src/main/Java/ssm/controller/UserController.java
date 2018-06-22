@@ -16,7 +16,6 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import ssm.entity.User;
 import ssm.service.UserService;
 
-import javax.persistence.Id;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;

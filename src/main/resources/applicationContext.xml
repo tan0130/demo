@@ -11,7 +11,7 @@
     http://www.springframework.org/schema/tx/spring-tx-4.0.xsd">
 
     <!-- 只解析除controller之外的注解(即解析service、dao), 避免重复加载导致事务失效  -->
-    <context:component-scan base-package="ssm.entity, ssm.service, ssm.test, ssm.dao">
+    <context:component-scan base-package="ssm.entity, ssm.service, ssm.test, ssm.dao, ssm.aop">
         <context:exclude-filter type="annotation" expression="org.springframework.stereotype.Controller"/>
     </context:component-scan>
 
@@ -56,10 +56,4 @@
 
     <!-- 使用注解事务，需要添加Transactional注解属性 -->
     <tx:annotation-driven transaction-manager="transactionManager" />
-
-    <!-- 校验器，配置validator -->
-    <!-- <bean id="validator" class="org.springframework.validation.beanvalidation.LocalValidatorFactoryBean">
-        <property name="providerClass" value="org.hibernate.validator.HibernateValidator"></property>
-        <property name="validationMessageSource" ref="validationMessageSource"></property>
-    </bean> -->
 </beans>

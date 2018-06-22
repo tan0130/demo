@@ -1,0 +1,6 @@
+四种方式实现AoP
+配置文件：
+1.applicationContext-Proxy.xml          基于代理实现AoP
+2.applicationContext-aspect.xml         @AspectJ注解驱动实现AoP
+3.applicationContext-autoProxy.xml      自动代理实现AoP
+4.applicationContext-POJO.xml           纯POJO切面实现AoP
