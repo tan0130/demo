@@ -1,0 +1,5 @@
+
+
+1.applicationContext.xml 配置数据库连接
+2.log4j.propertiesbak 采用 properties 方式配置日志
+3.MyBatis.xmlbak mybatis 配置数据库连接，用于测试 缓存

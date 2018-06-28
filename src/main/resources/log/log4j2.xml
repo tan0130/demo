@@ -2,7 +2,7 @@
 <!-- 日志级别优先级，从低到高：all < trace < debug < info < warn < error < fatal < off -->
 <!-- status用于设置log4j2自身内部信息输出，可以不设置 -->
 <!-- monitorInterval:log4j能够自动检测修配置文件和重新配置本身，设置间隔秒数 -->
-<configuration status="WARN" monitorInterval="1800">
+<configuration status="DEBUG" monitorInterval="1800">
     <!-- 先定义appender：日志需要输出的地方 -->
     <appenders>
         <!-- 输出到控制台的配置 -->

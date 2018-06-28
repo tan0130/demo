@@ -2,6 +2,8 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <!-- mapper通过命名空间的名称来搜索userMapeper接口,接口的方法名和id名称一致，然后执行相应的sql语句进行相应的操作 -->
 <mapper namespace = "ssm.dao.UserDAO">
+    <!-- 开启二级缓存 -->
+    <cache/>
     <!-- 获取所有用户信息 -->
     <select id = "getAllUser" resultType="java.util.Map">
         select * from user;

@@ -1,0 +1,8 @@
+class:
+
+1.JUnit4ClassRunner 单元测试加载 log4j 日志记录文件
+2.TestAoP   AoP 面向切面编程   测试类
+3.TestIoC   IoC 控制反转    测试类
+4.TestOneLevelCache 测试 MyBatis 一级缓存
+5.TestTwoLevelCache 测试 MyBatis 二级缓存
+6.UserControllerTest    UserController 单元测试类
