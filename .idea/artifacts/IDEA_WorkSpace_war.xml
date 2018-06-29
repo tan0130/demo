@@ -1,6 +1,6 @@
 <component name="ArtifactManager">
   <artifact type="war" name="IDEA WorkSpace:war">
-    <output-path>$PROJECT_DIR$/target</output-path>
+    <output-path>$PROJECT_DIR$/out</output-path>
     <root id="archive" name="maven.war">
       <element id="artifact" artifact-name="IDEA WorkSpace:war exploded" />
     </root>

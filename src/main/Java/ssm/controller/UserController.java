@@ -36,7 +36,6 @@ public class UserController {
     @RequestMapping(value = "/getUserById", produces = "application/json; charset=utf-8", method = RequestMethod.GET)
     @ResponseBody
     public String getUserById(int id) {
-        System.out.println(id);
         try {
             if(userService.getUserById(id) == null) {
                 return "false";
@@ -120,6 +119,7 @@ public class UserController {
     @RequestMapping(value = "/addUser", method = RequestMethod.POST)
     @ResponseBody
     public String addUser(User user) {
+        System.out.println("user:" + user);
         try {
             userService.addUser(user);
             return "success";
