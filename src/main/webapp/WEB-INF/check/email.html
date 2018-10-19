@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>邮箱验证</title>
+    <link rel="stylesheet" href="/resources/css/easyui.css"/>
+</head>
+<body>
+    <div style="margin-left:30%; margin-top:20%">
+        <fieldset style="width:400px">
+            <legend>邮箱找回密码</legend>
+            邮箱:<input type="email" id="email" class="easyui-textbox" style="width:120px;"/><br/>
+            验证码:<input type="email" id="checkCode" class="easyui-textbox" style="width:120px;"/><br/>
+            <button type="button" id="btn" onclick="send()">提交</button>
+            <button type="button" id="btn1" onclick="check()">校验</button>
+            <span style="margin-left: 20px" id="msg"></span>
+        </fieldset>
+    </div>
+    <script src="/resources/js/jquery.min.js"></script>
+    <script src="/resources/js/jquery.easyui.min.js"></script>
+<script>
+    function send() {
+        var email = $('#email').val();
+        $.ajax({
+            type: 'get',
+            url: '/password/sendEmail',
+            async: false,
+            cache: false,
+            dataType: 'json',
+            data: {
+                user_email: email
+            },
+            beforeSend: function() {
+                document.getElementById('btn').disabled = true;
+                document.getElementById('msg').innerHTML = "正在发送邮件中...";
+            },
+            success: function(res) {
+                if ("00023" === res.result) {
+                    document.getElementById('msg').innerHTML = "邮箱未绑定";
+                    document.getElementById('btn').disabled = false;
+                } else if ("00003" === res.result) {
+                    document.getElementById('msg').innerHTML = "邮件发送失败";
+                    document.getElementById('btn').disabled = false;
+                } else {
+                    document.getElementById('msg').innerHTML = "邮件发送成功";
+                    setTimeout(function () {
+                        document.getElementById('btn').disabled = false;
+                    },60000)
+                }
+            },
+            error: function() {
+                $.messager.alert("info","服务器错误，请联系管理员",'info');
+            }
+        })
+    }
+
+    function check() {
+        var checkCode = $('#checkCode').val().trim();
+        $.ajax({
+            type: 'get',
+            url: '/password/checkEmailCode',
+            async: false,
+            cache: false,
+            dataType: 'json',
+            data: {
+                checkCode: checkCode
+            },
+            success: function(res) {
+                if ("00026" === res.result) {
+                    document.getElementById('msg').innerHTML = "验证码不一致";
+                } else if ("00001" === res.result) {
+                    location.href = "/page/toPassword1";
+                }
+            },
+            error: function() {
+
+            }
+        })
+    }
+</script>
+</body>
+</html>

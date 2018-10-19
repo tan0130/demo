@@ -25,15 +25,15 @@
 			<table>
 				<tr>
 				 	<td width="60" align="right" style="margin-left:20px">用户名:</td>
-				 	<td><input type="text" id="nickname" name="nickname"/></td>
+				 	<td><input type="text" id="nick_name" name="nick_name"/></td>
 				</tr>
 				<tr>
 					<td align="right">姓&nbsp;&nbsp;&nbsp;名:</td>
-					<td><input type="text" id="username" name="username"/></td>
+					<td><input type="text" id="user_name" name="user_name"/></td>
 				</tr>
 				<tr>
 					<td align="right">密&nbsp;&nbsp;&nbsp;码:</td>
-					<td><input type="text" id="password" name="password"/></td>
+					<td><input type="password" id="user_password" name="user_password"/></td>
 				</tr>
 				<tr>
 					<td align="right">性&nbsp;&nbsp;&nbsp;别:</td>
@@ -41,7 +41,7 @@
 						<input type="radio" id="sex" name="sex" value="女"/>女
 					</td> -->
 					<td>
-						<select name="sex" class="easyui-combobox" panelHeight="auto" style="width:100px">
+						<select name="user_sex" id="user_sex" class="easyui-combobox" panelHeight="auto" style="width:100px">
 							<option selected="true" value="男">男</option>
 							<option value="女">女</option>
 						</select>
@@ -49,22 +49,22 @@
 				</tr>
 				<tr>
 					<td align="right">电&nbsp;&nbsp;&nbsp;话:</td>
-					<td><input type="text" id="tel" name="tel"/></td>
+					<td><input type="text" id="user_tel" name="user_tel"/></td>
 				</tr>
 				<tr>
 					<td align="right">邮&nbsp;&nbsp;&nbsp;箱:</td>
-					<td><input type="text" id="email" name="email"/></td>
+					<td><input type="text" id="user_email" name="user_email"/></td>
 				</tr>
-				<tr>
-					<td align="right">备&nbsp;&nbsp;&nbsp;注:</td>
-					<td><textarea rows="6" id="mark" name="mark" style="width:260px"></textarea></td>
-				</tr>
+				<!--<tr>-->
+					<!--<td align="right">备&nbsp;&nbsp;&nbsp;注:</td>-->
+					<!--<td><textarea rows="6" id="mark" name="mark" style="width:260px"></textarea></td>-->
+				<!--</tr>-->
 			</table>
 		</form>
 	</div>
 	<script type="text/javascript">
     function pagerFilter(data){            
-		if (typeof data.length == 'number' && typeof data.splice == 'function'){// is array                
+		if (typeof data.length === 'number' && typeof data.splice === 'function'){// is array
 			data = {                   
 				total: data.length,                   
 				rows: data               
@@ -110,13 +110,12 @@
 			nowrap: true, // 提高加载性能
 			columns:[[
 				{ field:'ck',checkbox:true},
-				{ field:'id',title:'用户编号',width:"15%"},
-				{ field:'nickname',title:'用户名',width:"15%"},
-				{ field:'username',title:'姓名',width:"15%"},
-				{ field:'sex',title:'性别',width:"8%"},
-				{ field:'tel',title:'电话',width:"15%"},
-				{ field:'email',title:'邮箱',width:"15%"},
-				{ field:'mark',title:'备注',width:"15%"}
+				{ field:'id',title:'用户编号',width:"17%"},
+				{ field:'nick_name',title:'用户名',width:"17%"},
+				{ field:'user_name',title:'姓名',width:"16%"},
+				{ field:'user_sex',title:'性别',width:"8%"},
+				{ field:'user_tel',title:'电话',width:"20%"},
+				{ field:'user_email',title:'邮箱',width:"20%"}
 			]]
 	    });
     }
@@ -124,15 +123,19 @@
 	 // 添加人员信息
 	 function add() {
 		 $('#add-form').form('submit',{
-			url:'/user/addUser',
+			 url:'/user/addUser',
 			 async: false,
-		 	success:function(data) {
-		 		if(data == "success") {
+			 dataType: 'json',
+		 	success:function(res) {
+			     // console.log("data:" + data.result);
+			     // var data = JSON.parse(res);
+                var data = eval('(' + res + ')');
+		 		if(data.result === "00001") {
 		 			$.messager.alert('信息提示','添加成功！','info');
 		 			$('add-dialog').dialog('close');
 		 			query();
-		 		} else {
-		 			$.messager.alert('信息提示','添加失败','info');
+		 		} else if (data.result === "00003") {
+		 			$.messager.alert('信息提示','服务器错误','info');
 		 			query();
 		 		}
 		 	},
@@ -166,7 +169,7 @@
 	 // 删除人员
 	 function remove() { 
 		 var items = $('#tb').datagrid('getChecked');
-		 if(items.length == 0) {
+		 if(items.length === 0) {
 			 $.messager.alert('信息提示','请选中要删除的行！','info');
 		 } else {
 			 var ids = []; // 用于存放要删除的id
@@ -181,12 +184,13 @@
 				 if(result) {
 					 $.ajax({
 						type: 'post',
-						url: '/user/delUser',
+						url: '/user/deleteUser',
+						 dataType: 'json',
 						data: {
-							"id": rowIndex
+							id : rowIndex
 						},
 						success:function(data) {
-							if(data == "success") {
+							if(data.result === "00001") {
 								$.messager.alert('信息提示','删除成功！','info');
 								query();
 							} else {
@@ -210,8 +214,9 @@
 		 var item = $('#tb').datagrid('getSelected');
 		  $('#add-form').form('submit',{
 				 url: '/user/updateUser?id=' + item.id,
-				 success:function(data) {
-					if(data == "success") {
+				 success:function(res) {
+				     var data = JSON.parse(res);
+					if(data.result === "00001") {
 						$.messager.alert('信息提示','提交成功','info');
 						$('#add-dialog').dialog('close');
 						query();
@@ -234,7 +239,7 @@
 			 ids.push(this.id);
 		 });
 //		 console.log(ids.length);
-		 if(ids.length != 1) {
+		 if(ids.length !== 1) {
 			 $.messager.alert('信息提示','一次只能编辑一行，你已选择'+ids.length+'个用户','info');
 		 } else {
 		 var item = $('#tb').datagrid('getSelected');
@@ -256,25 +261,24 @@
 				}]
 			 });
 		 	// 在对话框回显选中行的值
-			$('#nickname').val(item.nickname);
-            $('#username').val(item.username);
-            $('#password').val('*****');
-            $('#sex').val();
-            $('#tel').val(item.tel);  
-            $('#email').val(item.email); 
-            $('#mark').val(item.mark);
+			$('#nick_name').val(item.nick_name);
+            $('#user_name').val(item.user_name);
+            $('#user_password').val('*****');
+            $('#user_sex').val(item.user_sex);
+            $('#user_tel').val(item.user_tel);
+            $('#user_email').val(item.user_email);
 		 }
 	 }
 	 
 	 // 实现全局搜索功能
 	 function doSearch(value,name) {
 		 var text = $('#ss').searchbox('getValue');
-		 if(text == 0) {
+		 if(text === 0) {
 			 $.messager.alert('信息提示','请输入要查询的工号','info');
 			 query();
 		 } else {
 			 $('#tb').datagrid({
-		    	url:'/user/getUserById1?id='+ value,
+		    	url:'/user/getUserByIdList?id='+ value,
 		    	method: 'GET',
 				loadFilter:pagerFilter,	// 分页过滤器
 				//queryParams: params, // 传入查询参数
@@ -291,14 +295,13 @@
 				fit:true, // 高度自适应
 				nowrap: true, // 提高加载性能
 				columns:[[
-					{ field:'ck',checkbox:true},
-					{ field:'id',title:'用户编号',width:"15%"},
-					{ field:'nickname',title:'用户名',width:"15%"},
-					{ field:'username',title:'姓名',width:"15%"},
-					{ field:'sex',title:'性别',width:"8%"},
-					{ field:'tel',title:'电话',width:"15%"},
-					{ field:'email',title:'邮箱',width:"15%"},
-					{ field:'mark',title:'备注',width:"15%"}
+                    { field:'ck',checkbox:true},
+                    { field:'id',title:'用户编号',width:"17%"},
+                    { field:'nick_name',title:'用户名',width:"17%"},
+                    { field:'user_name',title:'姓名',width:"16%"},
+                    { field:'user_sex',title:'性别',width:"8%"},
+                    { field:'user_tel',title:'电话',width:"20%"},
+                    { field:'user_email',title:'邮箱',width:"20%"}
 				]]
 		    });
 		 }

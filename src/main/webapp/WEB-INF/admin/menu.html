@@ -13,15 +13,17 @@
 </head>
 
 <body class="easyui-layout">
-<div class="menu-hd" data-options="region:'north',border:false,split:true">
+<div class="menu-hd" data-options="region:'north',border:true,split:true">
     <div class="sys-name">员工信息管理系统</div>
+    <span id="login_name" class="login_name">好，欢迎登录！</span>
+    <a href="/login.html">注销</a>
 </div>
 <div class="menu-sidebar" data-options="region:'west',border:true,split:true,title:'菜单管理'">
-    <div class="easyui-accordion" data-options="border:false,fit:true" style="padding:;">
+    <div class="easyui-accordion" data-options="border:false,fit:true">
         <div title="快捷菜单" data-options="iconCls:'application_cascade'">
             <ul class="easyui-tree menu-tree">
-                <li iconCls="icon-password"><a href="javascript:void(0)" data-icon="icon-password" data-link="/user/toPage1" iframe="0">密码修改</a></li>
-                <li iconCls="icon-user"><a href="javascript:void(0)" data-icon="icon-user" data-link="/user/toPage2" iframe="0">用户信息</a></li>
+                <li iconCls="icon-password"><a href="javascript:void(0)" data-icon="icon-password" data-link="/page/toPassword" iframe="0">密码修改</a></li>
+                <li iconCls="icon-user"><a href="javascript:void(0)" data-icon="icon-user" data-link="/page/toInformation" iframe="0">用户信息</a></li>
             </ul>
         </div>
     </div>
@@ -32,7 +34,7 @@
 </div>
 <div class="menu-footer" data-options="region:'south',border:true,split:true">
     <span style="float:left">v1.0</span>
-    <span style="float:center">&copy;&nbsp;2018-2025&nbsp;版权所有</span>
+    <span style="float: center">&copy;&nbsp;2018-2025&nbsp;版权所有</span>
     <span style="float:right" id="currentTime"></span>
 </div>
 
@@ -49,6 +51,28 @@
 </div>
 
 <script type="text/javascript">
+
+    $(document).ready(function(){
+        $.ajax({
+            type: 'get',
+            url: '/user/name',
+            dataType: 'json',
+            async: false,
+            success: function(data) {
+                if ("00001" === data.result) {
+                    document.getElementById('login_name').innerHTML = data.user_name;
+                } else {
+                    $.messager.alert("信息提示","服务器错误","info");
+                }
+
+            },
+            error: function() {
+               $.messager.alert("信息提示","服务器错误","info");
+            }
+
+        })
+    });
+
     // 重写时间格式
     window.onload = setInterval(function(){
         document.getElementById('currentTime').innerHTML = (new Date()).Format("yyyy-MM-dd hh:mm:ss");
@@ -80,10 +104,10 @@
         });
 
         // 绑定右键菜单
-        $(document).bind('contextmenu',function(e){
+        $('#menu-tabs').bind('contextmenu',function(e){
             $('#mm').menu('show',{
                 left:e.pageX,
-                top:e.pageY,
+                top:e.pageY
             });
             var subTitle = $(this).children(".tabs-closable").text();
             $('#mm').data("currentTab",subTitle);

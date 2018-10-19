@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>短信验证</title>
+    <link rel="stylesheet" href="/resources/css/easyui.css"/>
+</head>
+<body>
+<div style="margin-left:30%; margin-top:20%">
+    <fieldset style="width:400px">
+        <legend>短信找回密码</legend>
+        手机号:<input type="tel" id="tel" class="easyui-textbox" style="width:120px;"/><br/>
+        验证码:<input type="text" id="checkCode" class="easyui-textbox" style="width:120px;"/><br/>
+        <button type="button" id="btn" onclick="send()">提交</button>
+        <button type="button" id="btn1" onclick="check()">校验</button>
+        <span style="margin-left: 20px" id="msg"></span>
+    </fieldset>
+</div>
+<script src="/resources/js/jquery.min.js"></script>
+<script src="/resources/js/jquery.easyui.min.js"></script>
+<script>
+    function send() {
+        var tel = $('#tel').val();
+        $.ajax({
+            type: 'get',
+            url: '/password/sendMsg',
+            async: false,
+            cache: false,
+            dataType: 'json',
+            data: {
+                user_tel: tel
+            },
+            beforeSend: function() {
+                document.getElementById('btn').disabled = true;
+                document.getElementById('msg').innerHTML = "短信正在发送中...";
+            },
+            success: function(res) {
+                if ("00025" === res.result) {
+                    document.getElementById('msg').innerHTML = "手机号未绑定";
+                    document.getElementById('btn').disabled = false;
+                } else if ("00024" === res.result) {
+                    document.getElementById('msg').innerHTML = "手机格式不正确";
+                    document.getElementById('btn').disabled = false;
+                } else if ("00003" === res.result) {
+                    document.getElementById('msg').innerHTML = "短信发送失败";
+                    document.getElementById('btn').disabled = false;
+                } else if(res.result === "00141") {
+                    alert("同一签名同一手机号码1小时内发送数次应小于等于4,请 1 小时后重试");
+                    document.getElementById('btn').disabled = false;
+                } else if ("00001" === res.result) {
+                    document.getElementById('msg').innerHTML = "短信发送成功";
+                    setTimeout(function () {
+                        document.getElementById('btn').disabled = false;
+                    },60000)
+                } else {
+
+                }
+            },
+            error: function() {
+                $.messager.alert("info","服务器错误，请联系管理员",'info');
+            }
+        })
+    }
+
+    function check() {
+        var checkCode = $('#checkCode').val().trim();
+        $.ajax({
+            type: 'post',
+            url: '/password/checkMsgCode',
+            async: false,
+            cache: false,
+            dataType: 'json',
+            data: {
+                checkCode: checkCode
+            },
+            success: function(res) {
+                if ("00026" === res.result) {
+                    document.getElementById('msg').innerHTML = "验证码不一致";
+                } else if ("00001" === res.result) {
+                    location.href = "/page/toPassword1";
+                }
+            },
+            error: function() {
+                $.messager.alert("信息提示", "服务器错误，请联系管理员", "info");
+            }
+        })
+    }
+</script>
+</body>
+</html>

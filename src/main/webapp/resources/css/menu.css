@@ -104,3 +104,9 @@ a:focus {
 	margin-left: 2%;
 	font-size: 14px;
 }
+
+.login_name {
+	color: red;
+	margin-left: 50%;
+	margin-top: 50px;
+}

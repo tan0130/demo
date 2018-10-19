@@ -19,18 +19,114 @@
         <div class="alert"><span></span></div>
         <div style="margin-top:40px;margin-left:100px">
             <span class="lg-label">工&nbsp;&nbsp;&nbsp;&nbsp;号:</span><input type="text" id="userId" name="userId" class="easyui-validatebox textbox" placeholder="请输入用户名" style="margin:10px;width:150px;height:26px"/>
+            <span id="idError"></span>
         </div>
         <div style="margin-left:100px">
             <span class="lg-label">密&nbsp;&nbsp;&nbsp;&nbsp;码:</span><input type="password" id="userPwd" name="userPwd" class="easyui-validatebox textbox" placeholder="请输入密码" style="margin:10px;width:150px;height:26px"/>
+            <span id="pwdError"></span>
         </div>
         <div style="margin-top:10px;margin-left:100px">
-            <input type="submit" class="easyui-linkbutton" value="登录" style="width:60px;height:25px"/>
+            <input type="button" class="easyui-linkbutton" value="登录" style="width:60px;height:25px" onclick="login()"/>
             <input type="reset" class="easyui-linkbutton" value="重置" style="margin-left:20px;width:60px;height:25px"/>
-            <a href=""><span class="forget">忘记密码</span></a>
+            <a href="/page/toCheck"><span class="forget">忘记密码</span></a>
+            <input type="checkbox" name="rememberMe" id="rememberMe" onclick="remember()" checked="checked">
         </div>
     </div>
 </form>
 <script type="text/javascript">
+
+    $(function() {
+        $.ajax({
+            type: 'get',
+            url: '/user/getCookie',
+            async: false,
+            cache: false,
+            dataType: 'json',
+            data: {},
+            success: function(res) {
+                $('#userId').val(res.loginAcount);
+                $('#userPwd').val(res.loginPassword);
+            },
+            error: function() {
+
+            }
+        })
+    })
+
+    // 日期格式转换
+    function formateDate() {
+        var date = new Date();
+        var seperator1 = "-";
+        var seperator2 = ":";
+        var month = date.getMonth() + 1;
+        var strDate = date.getDate();
+        var hour = date.getHours();
+        var minute = date.getMinutes();
+        var second = date.getSeconds();
+        if (month >= 1 && month <= 9) {
+            month = "0" + month;
+        }
+        if (strDate >= 0 && strDate <= 9) {
+            strDate = "0" + strDate;
+        }
+        if (hour >= 0 && hour <= 9) {
+            hour = "0" + hour;
+        }
+        if (minute >= 0 && minute <= 9) {
+            minute = "0" + minute;
+        }
+        if (second >= 0 && second <= 9) {
+            second = "0" + second;
+        }
+       var current_date = date.getFullYear() + seperator1 + month + seperator1 + strDate + " " + hour +
+            seperator2 + minute + seperator2 + second;
+        return current_date;
+
+    }
+
+    $('#rememberMe').val("1");
+
+    function login() {
+        var id = $('#userId').val();
+        var password = $('#userPwd').val();
+        var datetime = formateDate();
+        var remFlag = $('#rememberMe').val();
+        console.log("remFlag:" + remFlag);
+        if ("" === id || null === id) {
+            document.getElementById('pwdError').innerHTML = "";
+            document.getElementById('idError').innerHTML = "请输入用户名";
+        } else if ("" === password || null === password) {
+            document.getElementById('idError').innerHTML = "";
+            document.getElementById('pwdError').innerHTML = "请输入密码";
+        } else {
+            $.ajax({
+                url: '/user/login',
+                type: 'get',
+                async: false,
+                cache: false,
+                dataType: 'json',
+                data: {
+                    id: id,
+                    password: password,
+                    time: datetime,
+                    remFlag: remFlag
+                },
+                success: function (res) {
+                    if (res.result === "00021") {
+                        document.getElementById('pwdError').innerHTML = "";
+                        document.getElementById('idError').innerHTML = "用户不存在";
+                    } else if (res.result === "00022") {
+                        document.getElementById('idError').innerHTML = "";
+                        document.getElementById('pwdError').innerHTML = "密码错误";
+                    } else {
+                        window.location.href = "/page/toMenu?id=" + id;
+                    }
+                }
+            })
+        }
+    }
+
+
     // 设置一个标志位，防止ajax重复提交请求
     //var flag = false;
     // 自定义校验用户是否存在
@@ -44,21 +140,21 @@
             type: 'get',
             async: false,
             url: '/user/getUserById',
-            dataType: 'text',
+            dataType: 'json',
             data: {
                 id: userid
             },
             success: function(data) {
-                if(data == "false") {
+                if(data.result === "00021") {
                     value = false;
-                } else if(data == "false") {
+                } else if(data.result === "00003") {
                     $.messager.alert('信息提示', '服务不可用', 'info');
                 } else {
                     value = true;
                 }
                // flag = false; // 标记为可提交状态
             },
-            error: function(data) {
+            error: function() {
                // flag = false;
                 $.messager.alert('信息提示', '服务不可用!', 'info');
             }
@@ -69,19 +165,22 @@
     $.validator.addMethod('pwdCheck', function(value, element) {
         var userid = $('#userId').val();
         var userpwd = $('#userPwd').val();
+
         $.ajax({
             type: 'get',
             async: false,
             cache: false,
             url: '/user/getUserByIdAndPwd',
+            dataType: 'json',
             data: {
                 id: userid,
-                password: userpwd
+                password: userpwd,
+
             },
             success: function(data) {
-                if(data == "false") {
+                if(data.result === "00021" || data.result === "00022") {
                     value = false;
-                } else if(data == "false") {
+                } else if(data.result === "00003") {
                     $.messager.alert('信息提示', '服务不可用', 'info');
                 } else {
                     value = true;
@@ -94,33 +193,55 @@
         return this.optional(element) || value;
     }, '密码不正确');
 
-    $().ready(function(){
-        $('#signform').validate({
-            rules: {
-                userId: {
-                    required: true,
-                    idCheck: true
-                },
-                userPwd: {
-                    required: true,
-                    pwdCheck: true
-                }
-            },
-            messages: {
-                userId: {
-                    required: "该项为必填项",
-                    idCheck: "用户不存在"
-                },
-                userPwd: {
-                    required: "该项为必填项",
-                    pwdCheck: "密码不正确"
-                }
-            },
-            submitHandler: function() {
-                var id = $('#userId').val();
-                window.location.href = "/user/toPage?id=" + id;
+    function remember() {
+        // 记住选中状态
+        var remFlag = $('#rememberMe').is(':checked');
+        // console.log("remFlag:" + remFlag);
+        if (remFlag) {
+            // 使用 cookie 存用户名和密码，但是存在安全问题
+            var conFlag = confirm("记录密码功能不宜在公共场所使用,以防密码泄露.您确定要使用此功能吗?");
+            if(conFlag){
+                //确认标志
+                $("#rememberMe").val("1");
+            }else{
+                $("input:checkbox").removeAttr('checked');
+                $("#rememberMe").val("0");
             }
-        });
+        }else{
+            //如果没选中设置remFlag为""
+            $("#rememberMe").val("0");
+        }
+    }
+
+
+
+    $().ready(function(){
+        // $('#signform').validate({
+        //     rules: {
+        //         userId: {
+        //             required: true,
+        //             idCheck: true
+        //         },
+        //         userPwd: {
+        //             required: true,
+        //             pwdCheck: true
+        //         }
+        //     },
+        //     messages: {
+        //         userId: {
+        //             required: "该项为必填项",
+        //             idCheck: "用户不存在"
+        //         },
+        //         userPwd: {
+        //             required: "该项为必填项",
+        //             pwdCheck: "密码不正确"
+        //         }
+        //     },
+        //     submitHandler: function() {
+        //         var id = $('#userId').val();
+        //         window.location.href = "/page/toMenu?id=" + id;
+        //     }
+        // });
     });
 </script>
 </body>

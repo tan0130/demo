@@ -35,4 +35,16 @@
         <!-- 后缀 -->
         <property name="suffix" value=".html"/>
     </bean>
+
+    <!-- 拦截请求 -->
+    <mvc:interceptors>
+        <mvc:interceptor>
+            <mvc:mapping path="/page/toMenu"/>
+            <bean class="ssm.interceptor.LoginInterceptor"/>
+        </mvc:interceptor>
+        <mvc:interceptor>
+            <mvc:mapping path="/page/toInformation"/>
+            <bean class="ssm.interceptor.LoginInterceptor"/>
+        </mvc:interceptor>
+    </mvc:interceptors>
 </beans>

@@ -1,6 +1,5 @@
 package ssm.service;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import ssm.dao.UserDAO;
 import ssm.entity.User;
@@ -9,14 +8,13 @@ import javax.annotation.Resource;
 import java.util.List;
 
 /**
- * create by tan on 2018-05-03
- * 业务逻辑层实现
- * */
+ * create by 1311230692@qq.com on 2018/10/15 15:35
+ * 用户操作业务逻辑层实现
+ **/
 @Service("UserService")
 public class UserServiceImpl implements UserService{
 
-    // 注入userDAO
-    @Autowired
+    @Resource
     private UserDAO userDAO;
 
     @Override
@@ -51,11 +49,12 @@ public class UserServiceImpl implements UserService{
 
     @Override
     public void updatePassword(User user) {
+        System.out.println("修改密码");
         userDAO.updatePassword(user);
     }
 
     @Override
-    public List<User> getUserById1(int id) {
-        return userDAO.getUserById1(id);
+    public List<User> getUserByIdList(int id) {
+        return userDAO.getUserByIdList(id);
     }
 }

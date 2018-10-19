@@ -1,28 +1,28 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<!-- mapper通过命名空间的名称来搜索userMapeper接口,接口的方法名和id名称一致，然后执行相应的sql语句进行相应的操作 -->
+<!-- mapper通过命名空间的名称来搜索userMapper接口,接口的方法名和id名称一致，然后执行相应的sql语句进行相应的操作 -->
 <mapper namespace = "ssm.dao.UserDAO">
     <!-- 开启二级缓存 -->
     <cache/>
     <!-- 获取所有用户信息 -->
     <select id = "getAllUser" resultType="java.util.Map">
-        select * from user;
+        select * from tb_user;
     </select>
 
     <!-- 根据id查询用户信息 -->
     <select id = "getUserById" parameterType = "int" resultType="ssm.entity.User">
-        select * from user where id = #{id};
+        select * from tb_user where id = #{id};
     </select>
 
     <!-- 根据ID和密码查询用户信息 在MyBatis3.4.4版不能直接使用#{0}要使用 #{arg0}-->
     <select id="getUserByIdAndPwd" resultType="ssm.entity.User">
-        select * from user where id = #{arg0} and password = #{arg1};
+        select * from tb_user where id = #{arg0} and user_password = #{arg1};
     </select>
 
 
      <!--根据ID查询用户信息-->
-    <select id = "getUserById1" parameterType = "int" resultType="ssm.entity.User">
-        select * from user where id = #{id};
+    <select id = "getUserByIdList" parameterType = "int" resultType="ssm.entity.User">
+        select * from tb_user where id = #{id};
     </select>
 
     <!--根据ID和password来查询用户信息-->
@@ -32,21 +32,21 @@
 
     <!--添加用户信息-->
     <insert id = "addUser" parameterType="ssm.entity.User">
-        insert into user(nickname,username,password,sex,tel,email,mark) values(#{nickname},#{username},#{password},#{sex},#{tel},#{email},#{mark});
+        insert into tb_user(nick_name,user_name,user_password,user_sex,user_tel,user_email) values(#{nick_name},#{user_name},#{user_password},#{user_sex},#{user_tel},#{user_email});
     </insert>
 
     <!--删除用户信息-->
     <delete id = "deleteUser" parameterType = "int">
-        delete from user where id = #{id};
+        delete from tb_user where id = #{id};
     </delete>
 
     <!--编辑用户信息-->
     <update id = "updateUser" parameterType="ssm.entity.User">
-        update user set nickname=#{nickname},username=#{username},sex=#{sex},tel=#{tel},email=#{email},mark=#{mark} where id = #{id};
+        update tb_user set nick_name=#{nick_name},user_name=#{user_name},user_sex=#{user_sex},user_tel=#{user_tel},user_email=#{user_email} where id = #{id};
     </update>
 
     <!--修改用户密码-->
-    <update id="updatePassword" parameterType="ssm.entity.User">
-        update user set password=#{password} where id=#{id};
+    <update id="updatePassword">
+        update tb_user set user_password=#{user_password} where id=#{id};
     </update>
 </mapper>

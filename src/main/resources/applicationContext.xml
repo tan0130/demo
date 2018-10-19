@@ -10,6 +10,57 @@
     http://www.springframework.org/schema/tx
     http://www.springframework.org/schema/tx/spring-tx-4.0.xsd">
 
+    <!--加入 application.properties 配置文件-->
+    <context:property-placeholder location="classpath:application.properties"/>
+
+    <!-- 邮件发送 -->
+    <bean id="mailSender" class="org.springframework.mail.javamail.JavaMailSenderImpl">
+        <property name="host" value="${qq.mail.host}"/>
+        <property name="port" value="${qq.mail.port}"/>
+        <property name="username" value="${qq.mail.username}"/>
+        <property name="password" value="${qq.mail.password}"/>
+        <property name="defaultEncoding" value="${qq.mail.default-encoding}"/>
+        <property name="javaMailProperties">
+            <props>
+                <prop key="mail.smtp.auth">true</prop>
+                <prop key="mail.smtp.timeout">25000</prop>
+                <!--<prop key="mail.smtp.socketFactory.class">javax.net.ssl.SSLSocketFactory</prop>-->
+                <!-- 如果是网易邮箱， mail.smtp.starttls.enable 设置为 false-->
+                <prop key="mail.smtp.starttls.enable">true</prop>
+            </props>
+        </property>
+    </bean>
+
+    <!-- Shiro 配置 -->
+    <!--<bean id="shiroFilter" class="org.apache.shiro.spring.web.ShiroFilterFactoryBean">-->
+        <!--<property name="securityManager" ref="securityManager"/>-->
+
+        <!--<property name="filterChainDefinitions">-->
+            <!--<value>-->
+                <!--# some example chain definitions:-->
+                <!--/admin/** = authc, roles[admin]-->
+                <!--/docs/** = authc, perms[document:read]-->
+                <!--/** = authc-->
+                <!--# more URL-to-FilterChain definitions here-->
+            <!--</value>-->
+        <!--</property>-->
+    <!--</bean>-->
+    <!--<bean id="someFilter" class=""/>-->
+    <!--<bean id="anotherFilter" class=""> ... </bean>-->
+
+    <!--<bean id="securityManager" class="org.apache.shiro.web.mgt.DefaultWebSecurityManager">-->
+        <!--&lt;!&ndash; Single realm app.  If you have multiple realms, use the 'realms' property instead. &ndash;&gt;-->
+        <!--<property name="realm" ref="myRealm"/>-->
+        <!--&lt;!&ndash; By default the servlet container sessions will be used.  Uncomment this line-->
+             <!--to use shiro's native sessions (see the JavaDoc for more): &ndash;&gt;-->
+        <!--&lt;!&ndash; <property name="sessionMode" value="native"/> &ndash;&gt;-->
+    <!--</bean>-->
+    <!--<bean id="lifecycleBeanPostProcessor" class="org.apache.shiro.spring.LifecycleBeanPostProcessor"/>-->
+
+    <!--&lt;!&ndash; Define the Shiro Realm implementation you want to use to connect to your back-end &ndash;&gt;-->
+    <!--&lt;!&ndash; security datasource: &ndash;&gt;-->
+    <!--<bean id="myRealm" class="ssm.realm.MyRealm"/>-->
+
     <!-- 只解析除controller之外的注解(即解析service、dao), 避免重复加载导致事务失效  -->
     <context:component-scan base-package="ssm.entity, ssm.service, ssm.test, ssm.dao, ssm.aop">
         <context:exclude-filter type="annotation" expression="org.springframework.stereotype.Controller"/>
@@ -17,23 +68,30 @@
 
     <bean id="dataSource" class="org.apache.commons.dbcp.BasicDataSource"
           destroy-method="close">
-        <property name="driverClassName" value="com.mysql.jdbc.Driver" />
-        <property name="url" value="jdbc:mysql://localhost:3306/manage?characterEncoding=UTF-8" />
-        <property name="username" value="root" />
-        <property name="password" value="123456" />
+        <property name="driverClassName" value="${jdbc.driver_class_name}" />
+        <property name="url" value="${jdbc.url}" />
+        <property name="username" value="${jdbc.user_name}" />
+        <property name="password" value="${jdbc.user_password}" />
 
         <!-- 配置连接池的初始值 -->
-        <property name="initialSize" value="1" />
+        <property name="initialSize" value="${dbcp.initial_size}" />
         <!-- 连接池的最大值 -->
         <!-- <property name="maxActive" value="500"/> -->
         <!-- 最大空闲时，当经过一个高峰之后，连接池可以将一些用不到的连接释放，一直减少到maxIdle为止 -->
         <!-- <property name="maxIdle" value="2"/> -->
         <!-- 当最小空闲时，当连接少于minIdle时会自动去申请一些连接 -->
-        <property name="minIdle" value="1" />
-        <property name="maxActive" value="100" />
-        <property name="maxIdle" value="20" />
-        <property name="maxWait" value="1000" />
+        <property name="minIdle" value="${dbcp.maxIdle}" />
+        <property name="maxActive" value="${dbcp.maxActive}" />
+        <property name="maxIdle" value="${dbcp.minIdle}" />
+        <property name="maxWait" value="${dbcp.maxWait}" />
     </bean>
+
+    <!-- DAO接口所在包名，Spring会自动查找其下的类并注入到Spring的容器中 -->
+    <bean class="org.mybatis.spring.mapper.MapperScannerConfigurer">
+        <property name="basePackage" value="ssm.dao"/>
+        <property name="sqlSessionFactoryBeanName" value="sqlSessionFactory"/>
+    </bean>
+
 
     <!-- spring和MyBatis完美整合，不需要mybatis的配置映射文件 -->
     <bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
