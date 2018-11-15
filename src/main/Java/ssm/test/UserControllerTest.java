@@ -33,7 +33,7 @@ public class UserControllerTest {
 
     // 测试查找所有用户信息
     @Test
-    public void getAllUser() throws Exception{
+    public void test() throws Exception{
         ResultActions resultActions = this.mockMvc.perform(MockMvcRequestBuilders.get("/user/getUserById1?id=" + 1));
         MvcResult mvcResult = resultActions.andReturn();
         String result = mvcResult.getResponse().getContentAsString();

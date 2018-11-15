@@ -163,14 +163,15 @@ public class UserController {
             if (null == user) {
                 map.put("result", "00002");
             } else {
+//                System.out.println("添加用户");
                 userService.addUser(user);
-                System.out.println("添加成功");
+//                System.out.println("添加成功");
                 map.put("result", "00001");
             }
             return objectMapper.writeValueAsString(map);
         } catch (Exception e) {
             map.put("result", "00003");
-            System.out.println("添加失败");
+//            System.out.println("添加失败");
             return objectMapper.writeValueAsString(map);
         }
     }
@@ -268,7 +269,6 @@ public class UserController {
     public String login(int id, String password, int remFlag, HttpServletRequest request, HttpServletResponse response) throws Exception{
         ConcurrentHashMap<String, Object> map = new ConcurrentHashMap<>();
         ObjectMapper objectMapper = new ObjectMapper();
-
         try {
             if (null == userService.getUserById(id)) {
                 map.put("result", "00021");
@@ -292,6 +292,7 @@ public class UserController {
             return objectMapper.writeValueAsString(map);
         } catch (Exception e) {
             map.put("result", "00003");
+            System.out.println("controller login 异常");
             return objectMapper.writeValueAsString(map);
         }
     }
@@ -321,8 +322,7 @@ public class UserController {
 
     /**
      * 获取 Cookie中的信息
-     * @param request
-     * @throws IOException
+     * @param request 请求
      */
     @RequestMapping(value="/getCookie")
     @ResponseBody

@@ -1,10 +1,15 @@
 package ssm.service;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;
+import ssm.dao.RedisDAO;
 import ssm.dao.UserDAO;
+import ssm.dao.impl.RedisDAOImpl;
 import ssm.entity.User;
 
 import javax.annotation.Resource;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -17,6 +22,9 @@ public class UserServiceImpl implements UserService{
     @Resource
     private UserDAO userDAO;
 
+    @Resource
+    private RedisDAOImpl redisDAO;
+
     @Override
     public List<User> getAllUser() {
         return userDAO.getAllUser();
@@ -24,6 +32,17 @@ public class UserServiceImpl implements UserService{
 
     @Override
     public User getUserById(int id) {
+        System.out.println("UserServiceImpl 查询员工信息");
+
+        String userJson = redisDAO.get("user_" + String.valueOf(id));
+
+        if (StringUtils.isEmpty(userJson)) {
+            redisDAO.set("user_" + id, String.valueOf(id));
+            System.out.println("redis 数据写入成功，写入 user_id 数据为：" + id);
+        }
+        System.out.println("redis 键值查询 user_id:" + redisDAO.get("user_" + id));
+
+
         return userDAO.getUserById(id);
     }
 
@@ -34,6 +53,7 @@ public class UserServiceImpl implements UserService{
 
     @Override
     public void addUser(User user) {
+        System.out.println("service 层添加用户");
         userDAO.addUser(user);
     }
 

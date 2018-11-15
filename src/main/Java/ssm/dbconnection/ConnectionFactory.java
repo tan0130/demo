@@ -12,7 +12,7 @@ import java.sql.SQLException;
 public class ConnectionFactory {
     public static Connection getDatabaseConnection() throws SQLException {
         DriverManagerDataSource ds = new DriverManagerDataSource();
-        ds.setDriverClassName("com.mysql.cj.jdbc.Driver");
+        ds.setDriverClassName("com.mysql.jdbc.Driver");
         ds.setUrl("jdbc:mysql://localhost:3306/test?characterEncoding=utf-8&serverTimezone=GMT%2B8");
         ds.setUsername("root");
         ds.setPassword("liuke666");
